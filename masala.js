@@ -58,70 +58,158 @@
 
 // Avtobus tizimlashtirish
 
-class Bus {
-    constructor(id, route, seats, reservedSeats){
+// class Bus {
+//     constructor(id, route, seats, reservedSeats){
+//         this.id =id;
+//         this.route =route.toLowerCase();
+//         this.seats =seats;
+//         this.reservedSeats = reservedSeats.length === 0 ? [] : reservedSeats;
+//     };
+//     getDetails(){
+//         return `Id: ${this.id} Yo'nalishi: ${this.route} O'rindiqlari: ${this.seats} Band qilingan o'rindiqlar: ${this.reservedSeats.length}`
+//     }
+//     reserveSeat(seatNumber){
+//         if(this.reservedSeats.includes(seatNumber)){
+//             return `${seatNumber} raqamli o'rindiq allaqachon band`;
+//         } else {
+//             this.reservedSeats.push(seatNumber);
+//             return `${seatNumber} raqamli joy band qilindi`;
+//         }
+//     }
+//     cancelReservation(cancelseatNumber){
+//         return `${this.reservedSeats.filter((item) => item !==cancelseatNumber)}`
+//     }
+// };
+
+// let bus1 =new Bus(1, "Chilonzor", 44, [1, 4, 6]);
+// let bus2 =new Bus(2, "Olmazor", 41, [1, 4, 6, 10, 12]);
+// let bus3 =new Bus(3, "Sergeli", 10, [1, 6, 8]);
+
+
+// class BusSystem {
+//     buses =[]
+//     constructor(buses){
+//         this.buses =buses;
+//     }
+
+//     addBus(bus){
+//         this.buses =[...this.buses, bus];
+//         console.log("yangi avtobus qo'shildi")
+//     }
+//     listsBuses(){
+//         this.buses.forEach((value) => console.log(value))
+//     }
+//     searchByRoute(route){
+//         return this.buses.filter((v) => v.route.includes(route))
+//     }
+//     reserveSeat(busId, seatNumber){
+//         let bus =this.buses.find((b)=> b.id===busId);
+//         if(bus.id ==busId){
+//             return bus.reserveSeat(seatNumber)
+//         } else{
+//             return "Bunaqa avtobus topilmadi"
+//         }
+//     }
+//     cancelReservation(busId, seatNumber){
+//         let bus =this.buses.find((b)=> b.id===busId);
+//         if(bus.id ==busId){
+//             return bus.cancelReservation(seatNumber)
+//         } else{
+//             return "Bunaqa avtobus topilmadi"
+//         }
+//     }
+
+// }
+
+// let buslar =new BusSystem([bus1, bus2, bus3]);
+// console.log(buslar.reserveSeat(2, 20));
+
+
+
+
+
+
+
+
+
+
+// Shopping 
+class Product {
+    constructor(id, name, price, stock){
         this.id =id;
-        this.route =route.toLowerCase();
-        this.seats =seats;
-        this.reservedSeats = reservedSeats.length === 0 ? [] : reservedSeats;
-    };
+        this.name =name;
+        this.price =parseFloat(price.replace("$", ""));
+        this.stock =stock;
+    }
+
     getDetails(){
-        return `Id: ${this.id} Yo'nalishi: ${this.route} O'rindiqlari: ${this.seats} Band qilingan o'rindiqlar: ${this.reservedSeats.length}`
+        return `id: ${this.id} Nomi: ${this.name} Narxi: ${this.price} Miqdori: ${this.stock}`
     }
-    reserveSeat(seatNumber){
-        if(this.reservedSeats.includes(seatNumber)){
-            return `${seatNumber} raqamli o'rindiq allaqachon band`;
-        } else {
-            this.reservedSeats.push(seatNumber);
-            return `${seatNumber} raqamli joy band qilindi`;
-        }
+    updateStock(quantity){
+        this.stock =quantity;
+        return this.stock
+    };
+};
+
+
+let product1 =new Product(1, "Futbolka", "12.35$", 5);
+let product2 =new Product(2, "Poyabzal", "10$", 10);
+let product3 =new Product(3, "naski", "2$", 2);
+
+class OrderItem{
+    constructor(product, quantity){
+        this.product =product;
+        this.quantity =quantity;
     }
-    cancelReservation(cancelseatNumber){
-        return `${this.reservedSeats.filter((item) => item !==cancelseatNumber)}`
+
+    calculatePrice(){
+        return this.product.price * this.quantity;
+    }   
+
+};
+
+let olma =new OrderItem(product1, 4);
+let olma2 =new OrderItem(product2, 3);
+
+class Order {
+    constructor(id, items){
+        this.id =id;
+        this.items =[items];
+    }
+    addItem(orderItem){
+       return  this.items.push(orderItem)
+    }
+    calculateTotal(){
+        let total =0;
+        this.items.forEach(item =>{
+            total +=item.product.price * item.quantity;
+        });
+        return total
     }
 };
 
-let bus1 =new Bus(1, "Chilonzor", 44, [1, 4, 6]);
-let bus2 =new Bus(2, "Olmazor", 41, [1, 4, 6, 10, 12]);
-let bus3 =new Bus(3, "Sergeli", 10, [1, 6, 8]);
+let natija =new Order(1, olma)
+let natija2 =new Order(2, olma2)
 
 
-class BusSystem {
-    buses =[]
-    constructor(buses){
-        this.buses =buses;
+class Shop {
+    constructor(products, orders){
+        this.products =products;
+        this.orders =orders;
     }
-
-    addBus(bus){
-        this.buses =[...this.buses, bus];
-        console.log("yangi avtobus qo'shildi")
+    addProduct(product){
+        return products.push(product)
     }
-    listsBuses(){
-        this.buses.forEach((value) => console.log(value))
+    listProducts(){
+         this.products.forEach((val) =>{
+            console.log(val.getDetails())
+        })
     }
-    searchByRoute(route){
-        return this.buses.filter((v) => v.route.includes(route))
+    createOrder(order){
+        this.orders.push(order)
+        return order
     }
-    reserveSeat(busId, seatNumber){
-        let bus =this.buses.find((b)=> b.id===busId);
-        if(bus.id ==busId){
-            return bus.reserveSeat(seatNumber)
-        } else{
-            return "Bunaqa avtobus topilmadi"
-        }
-    }
-    cancelReservation(busId, seatNumber){
-        let bus =this.buses.find((b)=> b.id===busId);
-        if(bus.id ==busId){
-            return bus.cancelReservation(seatNumber)
-        } else{
-            return "Bunaqa avtobus topilmadi"
-        }
-    }
+};
 
-}
-
-let buslar =new BusSystem([bus1, bus2, bus3]);
-console.log(buslar.reserveSeat(2, 20));
-
-
+let shop =new Shop([product1, product2, product3], [natija, natija2]);
+console.log(shop.listProducts())
